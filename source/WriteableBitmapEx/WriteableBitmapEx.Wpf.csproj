@@ -1,10 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>CodingConnected.WriteableBitmapEx.Wpf</AssemblyName>
     <RootNamespace>System.Windows.Media.Imaging</RootNamespace>
-    <Version>1.1.0</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Rocscience.WriteableBitmapEx.Wpf</PackageId>
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <Description>WriteableBitmapEx library for WPF. Forked from CodingConnected.FastWpfGrid (LGPL-2.1).</Description>
+    <RepositoryUrl>https://github.com/Rocscience/Rocscience.FastWpfGrid</RepositoryUrl>
+    <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
@@ -12,6 +17,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
   </PropertyGroup>
+  <Target Name="AllowGitHubRemoteForAzureSourceLink" BeforeTargets="_InitializeAzureReposGitSourceLinkUrl">
+    <PropertyGroup>
+      <SourceLinkHasSingleProvider>false</SourceLinkHasSingleProvider>
+    </PropertyGroup>
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="Rocscience.CSPackageHelper" Version="1.0.1" PrivateAssets="All" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>..\..\output\Debug\</OutputPath>
   </PropertyGroup>

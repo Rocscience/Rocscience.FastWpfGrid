@@ -1,12 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>CodingConnected.FastWpfGrid</AssemblyName>
     <RootNamespace>CodingConnected.FastWpfGrid</RootNamespace>
-    <Version>1.1.0</Version>
     <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Rocscience.FastWpfGrid</PackageId>
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <Description>Fast WPF datagrid control. Forked from CodingConnected.FastWpfGrid (LGPL-2.1).</Description>
+    <RepositoryUrl>https://github.com/Rocscience/Rocscience.FastWpfGrid</RepositoryUrl>
+    <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
   </PropertyGroup>
+  <Target Name="AllowGitHubRemoteForAzureSourceLink" BeforeTargets="_InitializeAzureReposGitSourceLinkUrl">
+    <PropertyGroup>
+      <SourceLinkHasSingleProvider>false</SourceLinkHasSingleProvider>
+    </PropertyGroup>
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="Rocscience.CSPackageHelper" Version="1.0.1" PrivateAssets="All" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WriteableBitmapEx\WriteableBitmapEx.Wpf.csproj" />
   </ItemGroup>

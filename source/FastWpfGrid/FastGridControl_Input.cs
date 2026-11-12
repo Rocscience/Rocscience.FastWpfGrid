@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Modified by Rocscience on 2026-11-11. Double-click auto-fit keeps that column off the uniform width.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -234,7 +235,14 @@ namespace CodingConnected.FastWpfGrid
                     _columnSizes.PutSizeOverride(col, GetCellContentWidth(cell, _columnSizes.MaxSize) + 2 * CellPaddingHorizontal);
                 }
 
-                _columnSizes.BuildIndex();
+                if (!SizeColumnsToContent)
+                {
+                    _columnSizes.Resize(col, _columnSizes.GetSizeByRealIndex(col));
+                }
+                else
+                {
+                    _columnSizes.BuildIndex();
+                }
                 AdjustScrollbars();
                 SetScrollbarMargin();
                 FixScrollPosition();

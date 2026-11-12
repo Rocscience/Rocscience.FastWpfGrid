@@ -1,7 +1,7 @@
 **Project Description**
 Fast WPF datagrid control designed to work with large datasets, with mandatory data virtualization.
 
-_*Update 2026-11-05 - the project now targets .NET 10, namespaces/assemblies are `CodingConnected.FastWpfGrid` and `CodingConnected.WriteableBitmapEx.Wpf`, version 1.1.0*_
+_*Update 2026-11-12 - this Rocscience fork targets .NET 9 (`net9.0-windows`). Package ids are `Rocscience.FastWpfGrid` and `Rocscience.WriteableBitmapEx.Wpf`. Namespaces and assemblies stay `CodingConnected.FastWpfGrid` and `CodingConnected.WriteableBitmapEx.Wpf`, version 1.1.0.*_
 
 This repository is a fork of https://fastwpfgrid.codeplex.com/
 
@@ -21,7 +21,10 @@ This repository is a fork of https://fastwpfgrid.codeplex.com/
 
 ## Changes in 1.1.0
 
-* Target framework: .NET 10 (`net10.0-windows`).
+* Target framework: .NET 9 (`net9.0-windows`) in this fork. Upstream 1.1.0 targeted .NET 10.
+* `OnDpiChanged` rebuilds the bitmap when a monitor move does not resize the window.
+* `SizeColumnsToContent` (default true) can open every column at the default width. A drag or double-click auto-fit still wins for that column.
+* Text that does not fit a cell is drawn with an ellipsis. The trimmed-cell tooltip still uses the full string.
 * Assemblies/namespaces renamed to `CodingConnected.FastWpfGrid` / `CodingConnected.WriteableBitmapEx.Wpf`.
 * Removed `WriteableBitmap.Freeze()` of the previous draw buffer. It was a .NET Framework-era GC
   workaround; on .NET 8/10 buffers are collected normally, and `Freeze()` destroys the bitmap's native

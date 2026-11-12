@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Modified by Rocscience on 2026-11-11. SizeColumnsToContent uses the default column width.
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -455,6 +456,18 @@ namespace CodingConnected.FastWpfGrid
 
             if (_drawBuffer == null) return;
             if (GridScrollAreaWidth > 16) _columnSizes.MaxSize = GridScrollAreaWidth - 16;
+
+            if (!SizeColumnsToContent)
+            {
+                var uniform = MinColumnWidthOverride ?? _columnSizes.DefaultSize;
+                var count = _model == null ? 0 : (_isTransposed ? _modelRowCount : _modelColumnCount);
+                for (var col = 0; col < count; col++)
+                {
+                    _columnSizes.PutSizeOverride(col, uniform);
+                }
+                _columnSizes.BuildIndex();
+                return;
+            }
 
             if (IsWide) return;
             if (_model == null) return;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Modified by Rocscience on 2026-11-11. DPI update also runs from OnDpiChanged. SizeColumnsToContent skips content sizing.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -209,10 +210,33 @@ namespace CodingConnected.FastWpfGrid
             ScrollChanged();
         }
 
+        private bool _sizeColumnsToContent = true;
+
+        /// <summary>
+        /// When false, columns open at the default width instead of the widest visible cell.
+        /// A drag or a double-click auto-fit still wins for that column.
+        /// </summary>
+        public bool SizeColumnsToContent
+        {
+            get => _sizeColumnsToContent;
+            set
+            {
+                if (_sizeColumnsToContent == value)
+                {
+                    return;
+                }
+                _sizeColumnsToContent = value;
+                RecountColumnWidths();
+                AdjustScrollbars();
+                InvalidateAll();
+            }
+        }
+
         private void OnModelPropertyChanged()
         {
             if (_model != null) _model.DetachView(this);
             _model = Model;
+            _columnSizes.ClearUserSizes();
             if (_model != null) _model.AttachView(this);
             NotifyRefresh();
         }
@@ -667,6 +691,33 @@ namespace CodingConnected.FastWpfGrid
                 RecountRowHeights();
             }
             AdjustScrollbars();
+            InvalidateAll();
+        }
+
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            base.OnDpiChanged(oldDpi, newDpi);
+            if (!UpdateDpiFromVisual())
+            {
+                return;
+            }
+
+            var width = (int)ImageGrid.ActualWidth - 2;
+            var height = (int)ImageGrid.ActualHeight - 2;
+            if (width <= 0 || height <= 0)
+            {
+                _drawBuffer = null;
+                ApplyDrawBufferToImage(width, height);
+                return;
+            }
+
+            var pixelWidth = (int)Math.Ceiling(width * DpiDetector.DpiXKoef);
+            var pixelHeight = (int)Math.Ceiling(height * DpiDetector.DpiYKoef);
+            _drawBuffer = BitmapFactory.New(pixelWidth, pixelHeight);
+            ApplyDrawBufferToImage(width, height);
+            RecalculateDefaultCellSize();
+            AdjustScrollbars();
+            SetScrollbarMargin();
             InvalidateAll();
         }
 

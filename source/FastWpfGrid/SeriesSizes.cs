@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Modified by Rocscience on 2026-11-11. ClearUserSizes drops dragged widths when the grid model changes.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -208,6 +209,11 @@ namespace CodingConnected.FastWpfGrid
             var modelIndex = RealToModel(realIndex);
             _userSizesByModelIndex.Remove(modelIndex);
             _sizeOverridesByModelIndex.Remove(modelIndex);
+        }
+
+        public void ClearUserSizes()
+        {
+            _userSizesByModelIndex.Clear();
         }
 
         public int GetScroll(int sourceScrollIndex, int targetScrollIndex)

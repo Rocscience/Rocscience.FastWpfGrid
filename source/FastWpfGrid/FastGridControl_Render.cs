@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Modified by Rocscience on 2026-11-11. Text that does not fit the cell is drawn with an ellipsis.
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -351,9 +352,11 @@ namespace CodingConnected.FastWpfGrid
                     {
                         var textOrigin = new IntPoint(leftAlign ? leftPos : rightPos - width, top);
                         var font = GetFont(block.IsBold, block.IsItalic);
+                        var available = rightPos - leftPos;
+                        var drawText = width > available ? FitTextWithEllipsis(text, font, available) : text;
                         _drawBuffer.DrawString(textOrigin.X, textOrigin.Y, rectContent, selectedTextColor ?? block.FontColor ?? CellFontColor, UseClearType ? bgColor : (Color?) null,
                                                font,
-                                               text);
+                                               drawText);
                     }
                     break;
                 case FastGridBlockType.Image:
@@ -371,6 +374,26 @@ namespace CodingConnected.FastWpfGrid
             }
 
             return width;
+        }
+
+        private static string FitTextWithEllipsis(string text, GlyphFont font, int available)
+        {
+            if (available <= 0 || text.Length == 0)
+            {
+                return string.Empty;
+            }
+            const string ellipsis = "...";
+            var ellipsisWidth = font.GetTextWidth(ellipsis);
+            if (ellipsisWidth > available)
+            {
+                return string.Empty;
+            }
+            var count = text.Length;
+            while (count > 0 && font.GetTextWidth(text.Substring(0, count)) + ellipsisWidth > available)
+            {
+                count--;
+            }
+            return text.Substring(0, count) + ellipsis;
         }
 
         private void RenderCell(IFastGridCell cell, IntRect rect, Color? selectedTextColor, Color bgColor, FastGridCellAddress cellAddr)
